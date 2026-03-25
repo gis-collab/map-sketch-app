@@ -66,20 +66,47 @@ function exportPDF() {
 
   html2canvas(mapElement, {
     useCORS: true,
-    allowTaint: true
+    backgroundColor: "#ffffff"
   }).then(canvas => {
 
     const imgData = canvas.toDataURL("image/png");
 
     const pdf = new window.jspdf.jsPDF({
-      orientation: "landscape"
+      orientation: "landscape",
+      unit: "mm",
+      format: "a4"
     });
 
-    const imgWidth = 280;
-    const imgHeight = (canvas.height * imgWidth) / canvas.width;
+    // 🔲 Marco exterior
+    pdf.setLineWidth(0.5);
+    pdf.rect(5, 5, 287, 200);
 
-    pdf.addImage(imgData, "PNG", 10, 10, imgWidth, imgHeight);
-    pdf.save("plano.pdf");
+    // 🗺️ Área del mapa (izquierda)
+    pdf.addImage(imgData, "PNG", 10, 10, 200, 150);
+
+    // 🧾 Caja de título
+    pdf.rect(10, 165, 200, 30);
+    pdf.setFontSize(10);
+    pdf.text("PLANO DE MANEJO DE TRÁFICO", 12, 175);
+    pdf.text("Proyecto: ________", 12, 182);
+    pdf.text("Fecha: ________", 12, 189);
+
+    // 📊 Caja de convenciones (derecha)
+    pdf.rect(215, 10, 70, 120);
+    pdf.text("CONVENCIONES", 220, 20);
+
+    // Iconos dibujados 
+    pdf.setFontSize(9);
+    pdf.text("📍 Punto", 220, 35);
+    pdf.text("— Línea", 220, 45);
+    pdf.text("⬛ Área", 220, 55);
+
+    // 🧾 Caja inferior derecha
+    pdf.rect(215, 135, 70, 60);
+    pdf.text("OBSERVACIONES:", 220, 145);
+
+    pdf.save("plano_profesional.pdf");
+
   }).catch(error => {
     console.error("Error al exportar:", error);
   });
