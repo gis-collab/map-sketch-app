@@ -58,6 +58,9 @@ map.on(L.Draw.Event.CREATED, function (event) {
 });
 
 // 8. Función para agregar iconos
+function selectIcon(tipo) {
+  placingIcon = tipo;
+}
 
 function addIcon30() {
   placingIcon = "30";
@@ -118,33 +121,89 @@ function exportPDF() {
       format: "a4"
     });
 
-    // 🔲 Marco exterior
-    pdf.setLineWidth(0.5);
-    pdf.rect(5, 5, 287, 200);
+    // 📏 Medidas base
+    const pageWidth = 297;
+    const pageHeight = 210;
 
-    // 🗺️ Área del mapa (izquierda)
-    pdf.addImage(imgData, "PNG", 10, 10, 200, 150);
+    const margin = 5;
+    const bottomHeight = 40;
 
-    // 🧾 Caja de título
-    pdf.rect(10, 165, 200, 30);
-    pdf.setFontSize(10);
-    pdf.text("PLANO DE MANEJO DE TRÁFICO", 12, 175);
-    pdf.text("Proyecto: ________", 12, 182);
-    pdf.text("Fecha: ________", 12, 189);
+    // 🗺️ MAPA (arriba)
+    pdf.addImage(
+      imgData,
+      "PNG",
+      margin,
+      margin,
+      pageWidth - (margin * 2),
+      pageHeight - bottomHeight - margin
+    );
 
-    // 📊 Caja de convenciones (derecha)
-    pdf.rect(215, 10, 70, 120);
-    pdf.text("CONVENCIONES", 220, 20);
+    // 🔲 LÍNEA SEPARADORA
+    pdf.line(
+      margin,
+      pageHeight - bottomHeight,
+      pageWidth - margin,
+      pageHeight - bottomHeight
+    );
 
-    // Iconos dibujados 
-    pdf.setFontSize(9);
-    pdf.text("📍 Punto", 220, 35);
-    pdf.text("— Línea", 220, 45);
-    pdf.text("⬛ Área", 220, 55);
+    // =========================
+    // 📋 FRANJA INFERIOR
+    // =========================
 
-    // 🧾 Caja inferior derecha
-    pdf.rect(215, 135, 70, 60);
-    pdf.text("OBSERVACIONES:", 220, 145);
+    let yStart = pageHeight - bottomHeight;
+
+    // 🟦 BLOQUE IZQUIERDO (logo + info)
+    pdf.rect(margin, yStart, 60, bottomHeight);
+
+    pdf.setFontSize(8);
+    pdf.text("ACUEDUCTO", margin + 5, yStart + 10);
+    pdf.text("PMT POR EMERGENCIA", margin + 5, yStart + 18);
+    pdf.text("AC 20 x KR 39", margin + 5, yStart + 24);
+
+    // 🟨 BLOQUE CENTRAL (descripción)
+    pdf.rect(margin + 60, yStart, 140, bottomHeight);
+
+    pdf.setFontSize(7);
+    pdf.text(
+      "ACTIVIDADES PLANIFICADAS, COTIDIANAS Y DE EMERGENCIA EJECUTADAS POR LA EMPRESA DE ACUEDUCTO, ALCANTARILLADO Y ASEO DE BOGOTÁ D.C.",
+      margin + 65,
+      yStart + 10,
+      { maxWidth: 130 }
+    );
+
+    // 🟧 BLOQUE DERECHO (convenciones + info)
+    pdf.rect(margin + 200, yStart, 92, bottomHeight);
+
+    // subdivisiones internas
+    pdf.line(margin + 200, yStart + 15, pageWidth - margin, yStart + 15);
+    pdf.line(margin + 260, yStart, margin + 260, pageHeight - margin);
+
+    //  CONVENCIONES DINÁMICAS
+    pdf.setFontSize(7);
+    pdf.text("CONVENCIONES", margin + 202, yStart + 5);
+
+    // Convertir Set a array
+    let lista = Array.from(iconosUsados);
+
+    let yConv = yStart + 10;
+
+    if (lista.length === 0) {
+      pdf.text("Sin elementos", margin + 202, yConv);
+    } else {
+      lista.forEach((item, index) => {
+        pdf.text(item, margin + 202, yConv + (index * 5));
+      });
+    }   
+
+    // 📄 INFO DERECHA
+    pdf.text("HORARIO:", margin + 262, yStart + 5);
+    pdf.text("8:00 - 18:00", margin + 262, yStart + 10);
+
+    pdf.text("ESCALA: S/N", margin + 262, yStart + 18);
+    pdf.text("PLANO 1 DE 1", margin + 262, yStart + 25);
+
+    // 🧾 BORDE GENERAL
+    pdf.rect(2, 2, pageWidth - 4, pageHeight - 4);
 
     pdf.save("plano_profesional.pdf");
 
