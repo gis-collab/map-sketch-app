@@ -15,9 +15,12 @@
 <body>
 
 <div id="toolbar">
-  <button onclick="addIcon30()">🚫 30</button>
-  <button onclick="addIconObra()">🚧 Obra</button>
-  <button onclick="addIconDesvio()">↪️ Desvío</button>
+  <select id="iconSelector" onchange="selectIcon(this.value)">
+    <option value="">Seleccionar señal</option>
+    <option value="30">🚫 Velocidad </option>
+    <option value="obra">🚧 Obra</option>
+    <option value="desvio">↪️ Desvío</option>
+  </select>
   <button onclick="exportPDF()">📄 Exportar PDF</button>
   <button onclick="clearMap()">🧹 Limpiar</button>
 </div>
