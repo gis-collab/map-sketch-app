@@ -42,11 +42,11 @@ var drawControl = new L.Control.Draw({
     featureGroup: drawnItems
   },
   draw: {
-    polygon: true,
+    //polygon: true,
     polyline: true,
-    rectangle: true,
-    circle: false,
-    marker: true
+    //rectangle: true,
+    //circle: false,
+    //marker: true
   }
 });
 
