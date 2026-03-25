@@ -1,3 +1,4 @@
+var iconosUsados = new Set();
 // Estado de qué icono se va a poner
 var placingIcon = null;
 
@@ -83,14 +84,17 @@ map.on('click', function(e) {
 
   if (placingIcon === "30") {
     iconoSeleccionado = icono30;
+    iconosUsados.add("🚫 Señal 30");
   }
 
   if (placingIcon === "obra") {
     iconoSeleccionado = iconoObra;
+    iconosUsados.add("🚧 Obra");
   }
 
   if (placingIcon === "desvio") {
     iconoSeleccionado = iconoDesvio;
+    iconosUsados.add("↪️ Desvío");
   }
 
   var marker = L.marker(e.latlng, { icon: iconoSeleccionado });
@@ -102,6 +106,7 @@ map.on('click', function(e) {
 // 9. Limpiar mapa
 function clearMap() {
   drawnItems.clearLayers();
+  iconosUsados.clear();
 }
 
 // 10. Exportar a PDF
