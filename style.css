@@ -13,3 +13,8 @@ body {
 #map {
   height: 90vh;
 }
+
+select {
+  padding: 5px;
+  font-size: 14px;
+}
