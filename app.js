@@ -1,3 +1,22 @@
+// Estado de qué icono se va a poner
+var placingIcon = null;
+
+// Iconos
+var icono30 = L.icon({
+  iconUrl: 'icono-30.png',
+  iconSize: [40, 40]
+});
+
+var iconoObra = L.icon({
+  iconUrl: 'icono-obra.png',
+  iconSize: [40, 40]
+});
+
+var iconoDesvio = L.icon({
+  iconUrl: 'icono-desvio.png',
+  iconSize: [40, 40]
+});
+
 // 1. Crear mapa tipo plano (sin geografía real)
 var map = L.map('map', {
   crs: L.CRS.Simple,
@@ -38,21 +57,43 @@ map.on(L.Draw.Event.CREATED, function (event) {
   drawnItems.addLayer(event.layer);
 });
 
-// 8. Función para agregar icono simple
-var placingIcon = false;
+// 8. Función para agregar iconos
 
-function addIcon() {
-  placingIcon = true;
-  alert("Haz clic en el mapa para colocar el icono");
+function addIcon30() {
+  placingIcon = "30";
+}
+
+function addIconObra() {
+  placingIcon = "obra";
+}
+
+function addIconDesvio() {
+  placingIcon = "desvio";
 }
 
 // Detectar clic en el mapa
 map.on('click', function(e) {
-  if (placingIcon) {
-    var marker = L.marker(e.latlng);
-    drawnItems.addLayer(marker);
-    placingIcon = false;
+
+  if (!placingIcon) return;
+
+  let iconoSeleccionado;
+
+  if (placingIcon === "30") {
+    iconoSeleccionado = icono30;
   }
+
+  if (placingIcon === "obra") {
+    iconoSeleccionado = iconoObra;
+  }
+
+  if (placingIcon === "desvio") {
+    iconoSeleccionado = iconoDesvio;
+  }
+
+  var marker = L.marker(e.latlng, { icon: iconoSeleccionado });
+  drawnItems.addLayer(marker);
+
+  placingIcon = null;
 });
 
 // 9. Limpiar mapa
