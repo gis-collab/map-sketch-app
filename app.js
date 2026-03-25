@@ -24,7 +24,7 @@ var map = L.map('map', {
   minZoom: -2
 });
 
-// 2. Definir tamaño del plano (AJUSTA SI NO CUADRA)
+// 2. Definir tamaño del plano 
 var bounds = [[0,0], [1000,1000]];
 
 // 3. Cargar imagen del plano
@@ -43,11 +43,11 @@ var drawControl = new L.Control.Draw({
     featureGroup: drawnItems
   },
   draw: {
-    //polygon: true,
+    polygon: false,
     polyline: true,
-    //rectangle: true,
-    //circle: false,
-    //marker: true
+    rectangle: false,
+    circle: false,
+    marker: false
   }
 });
 
