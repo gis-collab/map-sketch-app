@@ -2,12 +2,11 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8">
-  <title>Sketch Map</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sketch Map - PMT Emergencias</title>
 
-  <!-- Leaflet -->
   <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
 
-  <!-- Leaflet Draw -->
   <link rel="stylesheet" href="https://unpkg.com/leaflet-draw/dist/leaflet.draw.css"/>
 
   <link rel="stylesheet" href="style.css">
@@ -16,18 +15,22 @@
 
 <div id="toolbar">
   <select id="iconSelector" onchange="selectIcon(this.value)">
-    <option value="">Seleccionar señal</option>
-    <option value="30">🚫 Velocidad </option>
-    <option value="obra">🚧 Obra</option>
+    <option value="">🚩 Seleccionar señal</option>
+    <option value="banderero">👷 Banderero</option>
+    <option value="colombinas">🚧 Colombinas</option>
     <option value="desvio">↪️ Desvío</option>
+    <option value="imag01">📍 Indicador 01</option>
+    <option value="imag02">📍 Indicador 02</option>
+    <option value="obra">⚠️ Obra en vía</option>
+    <option value="velocidad">🚫 Velocidad (30)</option>
   </select>
+
   <button onclick="exportPDF()">📄 Exportar PDF</button>
   <button onclick="clearMap()">🧹 Limpiar</button>
 </div>
 
 <div id="map"></div>
 
-<!-- Scripts -->
 <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
 <script src="https://unpkg.com/leaflet-draw/dist/leaflet.draw.js"></script>
 
