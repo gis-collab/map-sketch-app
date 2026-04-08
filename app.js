@@ -1,25 +1,23 @@
 var iconosUsados = new Set();
 var placingIcon = null;
 
-// --- 1. CONFIGURACIÓN DE ICONOS ---
-// Definimos un objeto para no repetir código
+// --- 1. CONFIGURACIÓN DE ICONOS (Tus nuevos archivos) ---
 const configuracionIconos = {
-  "banderero": { url: 'banderero.png', label: "👷 Banderero" },
-  "colombinas": { url: 'Colombinas.png', label: "🚧 Colombinas" },
-  "desvio": { url: 'desvio.png', label: "↪️ Desvío" },
-  "imag01": { url: 'Imag01.png', label: "📍 Indicador 01" },
-  "imag02": { url: 'Imag02.png', label: "📍 Indicador 02" },
-  "obra": { url: 'Obra_via.png', label: "⚠️ Obra en vía" },
-  "velocidad": { url: 'Velocidad.png', label: "🚫 Velocidad" }
+  "banderero": { url: 'banderero.png', label: "Banderero" },
+  "colombinas": { url: 'Colombinas.png', label: "Colombinas" },
+  "desvio": { url: 'desvio.png', label: "Desvío" },
+  "imag01": { url: 'Imag01.png', label: "Indicador 01" },
+  "imag02": { url: 'Imag02.png', label: "Indicador 02" },
+  "obra": { url: 'Obra_via.png', label: "Obra en vía" },
+  "velocidad": { url: 'Velocidad.png', label: "Velocidad" }
 };
 
-// Creamos los objetos L.icon de Leaflet dinámicamente
 const leafletIcons = {};
 for (const key in configuracionIconos) {
   leafletIcons[key] = L.icon({
     iconUrl: configuracionIconos[key].url,
     iconSize: [40, 40],
-    iconAnchor: [20, 20] // Centrado
+    iconAnchor: [20, 20]
   });
 }
 
@@ -40,11 +38,7 @@ map.addLayer(drawnItems);
 var drawControl = new L.Control.Draw({
   edit: { featureGroup: drawnItems },
   draw: {
-    polygon: false,
-    polyline: true,
-    rectangle: false,
-    circle: false,
-    marker: false
+    polygon: false, polyline: true, rectangle: false, circle: false, marker: false
   }
 });
 map.addControl(drawControl);
@@ -53,27 +47,21 @@ map.on(L.Draw.Event.CREATED, function (event) {
   drawnItems.addLayer(event.layer);
 });
 
-// --- 4. FUNCIONES PARA AGREGAR ICONOS ---
-// Ahora una sola función recibe el tipo
+// --- 4. FUNCIONES DE ICONOS ---
 function selectIcon(tipo) {
   placingIcon = tipo;
 }
 
-// Detectar clic en el mapa
 map.on('click', function(e) {
-  if (!placingIcon) return;
-
+  if (!placingIcon || placingIcon === "") return;
   const data = configuracionIconos[placingIcon];
-  
   if (data) {
     var marker = L.marker(e.latlng, { icon: leafletIcons[placingIcon] });
     drawnItems.addLayer(marker);
-    
-    // Agregamos a la lista de convenciones para el PDF
     iconosUsados.add(data.label);
   }
-
-  placingIcon = null; // Reset para el siguiente clic
+  placingIcon = null;
+  document.getElementById("iconSelector").value = "";
 });
 
 function clearMap() {
@@ -81,7 +69,7 @@ function clearMap() {
   iconosUsados.clear();
 }
 
-// --- 5. EXPORTAR A PDF (Se mantiene tu lógica pro) ---
+// --- 5. EXPORTAR PDF (TU CONFIGURACIÓN ORIGINAL) ---
 function exportPDF() {
   const mapElement = document.getElementById("map");
 
@@ -91,9 +79,7 @@ function exportPDF() {
   }).then(canvas => {
     const imgData = canvas.toDataURL("image/png");
     const pdf = new window.jspdf.jsPDF({
-      orientation: "landscape",
-      unit: "mm",
-      format: "a4"
+      orientation: "landscape", unit: "mm", format: "a4"
     });
 
     const pageWidth = 297;
@@ -108,17 +94,19 @@ function exportPDF() {
     let yStart = pageHeight - bottomHeight;
     pdf.line(margin, yStart, pageWidth - margin, yStart);
 
-    // FRANJA INFERIOR - BLOQUES (Tu diseño original)
+    // BLOQUE IZQUIERDO (Logo + Info original)
     pdf.rect(margin, yStart, 60, bottomHeight);
     pdf.setFontSize(8);
     pdf.text("ACUEDUCTO", margin + 5, yStart + 10);
     pdf.text("PMT POR EMERGENCIA", margin + 5, yStart + 18);
     pdf.text("AC 20 x KR 39", margin + 5, yStart + 24);
 
+    // BLOQUE CENTRAL (Descripción original)
     pdf.rect(margin + 60, yStart, 140, bottomHeight);
     pdf.setFontSize(7);
     pdf.text("ACTIVIDADES PLANIFICADAS, COTIDIANAS Y DE EMERGENCIA EJECUTADAS POR LA EMPRESA DE ACUEDUCTO, ALCANTARILLADO Y ASEO DE BOGOTÁ D.C.", margin + 65, yStart + 10, { maxWidth: 130 });
 
+    // BLOQUE DERECHO (Convenciones y Horarios original)
     pdf.rect(margin + 200, yStart, 92, bottomHeight);
     pdf.line(margin + 200, yStart + 15, pageWidth - margin, yStart + 15);
     pdf.line(margin + 260, yStart, margin + 260, pageHeight - margin);
@@ -126,24 +114,24 @@ function exportPDF() {
     pdf.setFontSize(7);
     pdf.text("CONVENCIONES", margin + 202, yStart + 5);
 
+    // Lista dinámica de convenciones basada en iconos usados
     let lista = Array.from(iconosUsados);
     let yConv = yStart + 10;
     if (lista.length === 0) {
       pdf.text("Sin elementos", margin + 202, yConv);
     } else {
       lista.forEach((item, index) => {
-        // Ajuste para que no se salgan si hay muchos (2 columnas)
-        let xOffset = index > 4 ? 30 : 0; 
-        let yOffset = (index % 5) * 4;
-        pdf.text(item, margin + 202 + xOffset, yConv + yOffset);
+        // Ajuste simple para que quepan varias en el cuadro
+        pdf.text("• " + item, margin + 202, yConv + (index * 4));
       });
     }   
 
-    pdf.text("HORARIO: 8:00 - 18:00", margin + 262, yStart + 5);
+    pdf.text("HORARIO:", margin + 262, yStart + 5);
+    pdf.text("8:00 - 18:00", margin + 262, yStart + 10);
     pdf.text("ESCALA: S/N", margin + 262, yStart + 18);
     pdf.text("PLANO 1 DE 1", margin + 262, yStart + 25);
-    pdf.rect(2, 2, pageWidth - 4, pageHeight - 4);
 
-    pdf.save("plano_PMT_emergencia.pdf");
+    pdf.rect(2, 2, pageWidth - 4, pageHeight - 4);
+    pdf.save("plano_profesional.pdf");
   });
 }
