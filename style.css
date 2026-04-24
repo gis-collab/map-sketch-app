@@ -1,28 +1,35 @@
+/* 1. Reset básico para asegurar que no hay márgenes ocultos */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+/* 2. Cuerpo como contenedor flexible */
 html, body {
-  margin: 0;
-  padding: 0;
-  height: 100%; /* Ocupa toda la altura disponible */
-  width: 100%;
-  overflow: hidden; /* Evita barras de desplazamiento */
-  font-family: Arial, sans-serif;
-  display: flex;           /* 1. Activamos flexbox en el body */
-  flex-direction: column;  /* 2. Ponemos los elementos en columna (barra arriba, mapa abajo) */
+    height: 100%;
+    width: 100%;
+    overflow: hidden; /* Esto mata cualquier barra de scroll */
 }
 
+body {
+    display: flex;
+    flex-direction: column;
+}
+
+/* 3. Toolbar: Ocupa solo lo que necesita (ni más, ni menos) */
 #toolbar {
-  padding: 10px;
-  background: #f0f0f0;
-  flex: 0 0 auto; /* 3. La barra mide solo lo que necesite, ni más ni menos */
+    flex: 0 0 auto; 
+    padding: 10px;
+    background: #f0f0f0;
+    z-index: 1000; /* Asegura que esté por encima del mapa */
 }
 
+/* 4. Mapa: Ocupa todo el espacio restante */
 #map {
-  flex-grow: 1; /* 4. EL MAPA TOMA TODO EL ESPACIO QUE SOBRA */
-  width: 100%;
-}
-
-select {
-  padding: 5px;
-  font-size: 14px;
+    flex: 1; 
+    width: 100%;
+    position: relative; /* Necesario para que Leaflet se ubique bien */
 }
 
 
