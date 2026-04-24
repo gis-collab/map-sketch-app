@@ -10,7 +10,7 @@ html, body {
 
 #toolbar {
     height: 50px; /* Tamaño fijo de tu barra superior */
-    background: #f0f0f0;
+    background: #ffffff;
     flex-shrink: 0; /* Esto evita que la barra se encoja */
 }
 
