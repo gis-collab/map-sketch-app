@@ -1,25 +1,25 @@
-html, body {
+/*html, body {
     margin: 0;
     padding: 0;
     height: 100%;
     width: 100%;
-    overflow: hidden; /* Esto es vital para que no salgan barras de scroll */
+    overflow: hidden; 
     display: flex;
     flex-direction: column;
 }
 
 #toolbar {
-    height: 50px; /* Tamaño fijo de tu barra superior */
+    height: 50px; 
     background: #ffffff;
-    flex-shrink: 0; /* Esto evita que la barra se encoja */
+    flex-shrink: 0; 
 }
 
-/* Borra lo que tengas de #map y pon esto */
+
 #map {
     flex: 1 !important;
     width: 100vw !important;
-    height: calc(100vh - 70px) !important; /* Ajusta este 70px a la altura de tu toolbar */
-    background-color: white !important; /* Para ver si el contenedor existe */
+    height: calc(100vh - 70px) !important; 
+    background-color: white !important;  */
 }
 
 
