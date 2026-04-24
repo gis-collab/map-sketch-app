@@ -55,9 +55,10 @@ function selectIcon(tipo) {
 }
 
 map.on('click', function(e) {
-  if (!placingIcon || placingIcon === "") return;
+  // Si no hay modo activo, no hacemos nada
+  if (!placingIcon) return;
 
-  // Si es modo texto
+  // 1. MODO TEXTO
   if (placingIcon === 'TEXT_MODE') {
     const texto = prompt("Escribe el texto:");
     if (texto) {
@@ -66,11 +67,11 @@ map.on('click', function(e) {
         className: 'text-label',
         iconSize: [null, null]
       });
-      const marker = L.marker(e.latlng, { icon: myIcon });
-      drawnItems.addLayer(marker); // Esto lo hace editable (mover/borrar) automáticamente
+      // Añadimos directamente a drawnItems para que sea editable
+      L.marker(e.latlng, { icon: myIcon }).addTo(drawnItems);
     }
   } 
-  // Si es modo icono
+  // 2. MODO ICONO
   else {
     const data = configuracionIconos[placingIcon];
     if (data) {
@@ -78,9 +79,12 @@ map.on('click', function(e) {
       drawnItems.addLayer(marker);
       iconosUsados.add(data.label);
     }
-    document.getElementById("iconSelector").value = "";
+    // Solo reseteamos el selector si era un icono
+    const selector = document.getElementById("iconSelector");
+    if (selector) selector.value = "";
   }
   
+  // Limpiamos el modo activo después de usarlo
   placingIcon = null;
 });
 // --- 5. EXPORTAR PDF (TU CONFIGURACIÓN ORIGINAL) ---
