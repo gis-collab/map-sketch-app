@@ -55,6 +55,9 @@ function selectIcon(tipo) {
 }
 
 map.on('click', function(e) {
+
+  console.log("Clic detectado en el mapa. Valor de placingIcon:", placingIcon);
+  
   // Si no hay modo activo, no hacemos nada
   if (!placingIcon) return;
 
@@ -154,7 +157,7 @@ function exportPDF() {
   });
 }
 
-L.imageOverlay('plano1.png', bounds).addTo(map);
+//L.imageOverlay('plano1.png', bounds).addTo(map);
 
 window.addEventListener('load', function() {
     map.invalidateSize();
