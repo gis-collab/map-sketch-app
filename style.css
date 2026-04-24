@@ -38,6 +38,17 @@ html, body {
       width: 100%; 
       background: #ffffff; }
 
+/* Estilo para el texto en el mapa */
+.text-label {
+    background: transparent;
+    border: none;
+    font-weight: bold;
+    color: black;
+    white-space: nowrap;
+    font-size: 16px;
+    text-shadow: 1px 1px 2px white; 
+}
+
 
 
 
