@@ -14,7 +14,7 @@ const leafletIcons = {};
 for (const key in configuracionIconos) {
   leafletIcons[key] = L.icon({
     iconUrl: configuracionIconos[key].url,
-    iconSize: [40, 40],
+    iconSize: [80, 80],
     iconAnchor: [20, 20]
   });
 }
