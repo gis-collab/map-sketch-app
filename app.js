@@ -140,8 +140,14 @@ function exportPDF() {
 
 L.imageOverlay('plano1.png', bounds).addTo(map);
 
-// Esto fuerza al mapa a recalcular su tamaño al cargar
-setTimeout(function() {
+window.addEventListener('load', function() {
     map.invalidateSize();
-    map.fitBounds(bounds);
-}, 500);
+    
+    // Esto es un "truco" para que la imagen ocupe más espacio
+    // En lugar de fitBounds, usamos setView con un zoom calculado manualmente
+    // 0 es el zoom inicial. Prueba con 0, o sube a 0.5 si quieres más zoom
+    map.setView([1968 / 2, 2901 / 2], 0); 
+    
+    // O si prefieres quedarte con fitBounds pero sin espacios, fuerza esto:
+    map.fitBounds(bounds, { padding: [0, 0] });
+});
