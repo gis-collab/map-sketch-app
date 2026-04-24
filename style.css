@@ -1,27 +1,30 @@
 html, body {
   margin: 0;
   padding: 0;
-  height: 100%;
+  height: 100%; /* Ocupa toda la altura disponible */
   width: 100%;
-  overflow: hidden;
+  overflow: hidden; /* Evita barras de desplazamiento */
   font-family: Arial, sans-serif;
+  display: flex;           /* 1. Activamos flexbox en el body */
+  flex-direction: column;  /* 2. Ponemos los elementos en columna (barra arriba, mapa abajo) */
 }
 
 #toolbar {
   padding: 10px;
   background: #f0f0f0;
-  display: flex;
-  gap: 10px;
+  flex: 0 0 auto; /* 3. La barra mide solo lo que necesite, ni más ni menos */
 }
 
 #map {
-  height: 100vh; 
-  width: 100vw;
+  flex-grow: 1; /* 4. EL MAPA TOMA TODO EL ESPACIO QUE SOBRA */
+  width: 100%;
 }
 
 select {
   padding: 5px;
   font-size: 14px;
 }
+
+
 
 
