@@ -157,7 +157,7 @@ function exportPDF() {
   });
 }
 
-//L.imageOverlay('plano1.png', bounds).addTo(map);
+L.imageOverlay('plano1.png', bounds).addTo(map);
 
 window.addEventListener('load', function() {
     map.invalidateSize();
