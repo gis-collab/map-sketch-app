@@ -140,4 +140,10 @@ function exportPDF() {
 
 window.addEventListener('load', function() {
     map.invalidateSize();
+    map.fitBounds(bounds);
+});
+
+window.addEventListener('resize', function() {
+    map.invalidateSize();
+    map.fitBounds(bounds);
 });
