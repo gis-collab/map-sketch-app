@@ -1,35 +1,22 @@
-/* 1. Reset básico para asegurar que no hay márgenes ocultos */
-* {
+html, body {
     margin: 0;
     padding: 0;
-    box-sizing: border-box;
-}
-
-/* 2. Cuerpo como contenedor flexible */
-html, body {
     height: 100%;
     width: 100%;
-    overflow: hidden; /* Esto mata cualquier barra de scroll */
-}
-
-body {
+    overflow: hidden; /* Esto es vital para que no salgan barras de scroll */
     display: flex;
     flex-direction: column;
 }
 
-/* 3. Toolbar: Ocupa solo lo que necesita (ni más, ni menos) */
 #toolbar {
-    flex: 0 0 auto; 
-    padding: 10px;
+    height: 50px; /* Tamaño fijo de tu barra superior */
     background: #f0f0f0;
-    z-index: 1000; /* Asegura que esté por encima del mapa */
+    flex-shrink: 0; /* Esto evita que la barra se encoja */
 }
 
-/* 4. Mapa: Ocupa todo el espacio restante */
 #map {
-    flex: 1; 
+    flex-grow: 1; /* El mapa se estira para llenar el resto de la pantalla */
     width: 100%;
-    position: relative; /* Necesario para que Leaflet se ubique bien */
 }
 
 
