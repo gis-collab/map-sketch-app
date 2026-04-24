@@ -6,8 +6,6 @@ const configuracionIconos = {
   "banderero": { url: 'banderero.png', label: "Banderero" },
   "colombinas": { url: 'Colombinas.png', label: "Colombinas" },
   "desvio": { url: 'desvio.png', label: "Desvío" },
-  "imag01": { url: 'Imag01.png', label: "Indicador 01" },
-  "imag02": { url: 'Imag02.png', label: "Indicador 02" },
   "obra": { url: 'Obra_via.png', label: "Obra en vía" },
   "velocidad": { url: 'Velocidad.png', label: "Velocidad" }
 };
