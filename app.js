@@ -138,12 +138,10 @@ function exportPDF() {
   });
 }
 
-window.addEventListener('load', function() {
-    map.invalidateSize();
-    map.fitBounds(bounds);
-});
+L.imageOverlay('plano1.png', bounds).addTo(map);
 
-window.addEventListener('resize', function() {
+// Esto fuerza al mapa a recalcular su tamaño al cargar
+setTimeout(function() {
     map.invalidateSize();
     map.fitBounds(bounds);
-});
+}, 500);
