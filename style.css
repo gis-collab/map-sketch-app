@@ -19,8 +19,7 @@ html, body {
     flex: 1 !important;
     width: 100vw !important;
     height: calc(100vh - 70px) !important; /* Ajusta este 70px a la altura de tu toolbar */
-    border: 5px solid red !important; /* ESTO ES LA CLAVE */
-    background-color: yellow !important; /* Para ver si el contenedor existe */
+    background-color: white !important; /* Para ver si el contenedor existe */
 }
 
 
