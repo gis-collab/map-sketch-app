@@ -137,3 +137,7 @@ function exportPDF() {
     pdf.save("plano_profesional.pdf");
   });
 }
+
+window.addEventListener('load', function() {
+    map.invalidateSize();
+});
