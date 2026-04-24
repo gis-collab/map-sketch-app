@@ -14,9 +14,13 @@ html, body {
     flex-shrink: 0; /* Esto evita que la barra se encoja */
 }
 
+/* Borra lo que tengas de #map y pon esto */
 #map {
-    flex-grow: 1; /* El mapa se estira para llenar el resto de la pantalla */
-    width: 100%;
+    flex: 1 !important;
+    width: 100vw !important;
+    height: calc(100vh - 70px) !important; /* Ajusta este 70px a la altura de tu toolbar */
+    border: 5px solid red !important; /* ESTO ES LA CLAVE */
+    background-color: yellow !important; /* Para ver si el contenedor existe */
 }
 
 
