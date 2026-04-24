@@ -1,6 +1,10 @@
 var iconosUsados = new Set();
 var placingIcon = null;
 
+function enableTextMode() {
+  placingIcon = 'TEXT_MODE';
+  alert("Haz clic en el mapa para colocar el texto");
+}
 // --- 1. CONFIGURACIÓN DE ICONOS (Tus nuevos archivos) ---
 const configuracionIconos = {
   "banderero": { url: 'banderero.png', label: "Banderero" },
@@ -52,63 +56,33 @@ function selectIcon(tipo) {
 
 map.on('click', function(e) {
   if (!placingIcon || placingIcon === "") return;
-  const data = configuracionIconos[placingIcon];
-  if (data) {
-    var marker = L.marker(e.latlng, { icon: leafletIcons[placingIcon] });
-    drawnItems.addLayer(marker);
-    iconosUsados.add(data.label);
-  }
-  placingIcon = null;
-  document.getElementById("iconSelector").value = "";
-});
 
-function clearMap() {
-  drawnItems.clearLayers();
-  iconosUsados.clear();
-}
-
-setTimeout(function() {
-    map.invalidateSize();
-}, 100);
-
-// 1. Nueva función para activar el modo texto
-function enableTextMode() {
-    placingIcon = 'TEXT_MODE';
-    alert("Haz clic en el mapa donde quieras poner el texto");
-}
-
-// 2. Modifica tu map.on('click') para incluir el modo texto
-map.on('click', function(e) {
-    if (!placingIcon) return;
-
-    if (placingIcon === 'TEXT_MODE') {
-        const texto = prompt("Escribe el texto:");
-        if (texto) {
-            // Creamos un icono que es solo texto
-            const myIcon = L.divIcon({
-                html: texto,
-                className: 'text-label', // Usa el CSS que pusimos arriba
-                iconSize: [100, 30]
-            });
-            
-            // Creamos el marcador y lo añadimos a drawnItems (para poder editarlo luego)
-            const marker = L.marker(e.latlng, { icon: myIcon });
-            drawnItems.addLayer(marker);
-        }
-        placingIcon = null; // Reset
-    } else {
-        // Tu lógica existente para iconos (banderero, etc.)
-        const data = configuracionIconos[placingIcon];
-        if (data) {
-            var marker = L.marker(e.latlng, { icon: leafletIcons[placingIcon] });
-            drawnItems.addLayer(marker);
-            iconosUsados.add(data.label);
-        }
-        placingIcon = null;
-        document.getElementById("iconSelector").value = "";
+  // Si es modo texto
+  if (placingIcon === 'TEXT_MODE') {
+    const texto = prompt("Escribe el texto:");
+    if (texto) {
+      const myIcon = L.divIcon({
+        html: texto,
+        className: 'text-label',
+        iconSize: [null, null]
+      });
+      const marker = L.marker(e.latlng, { icon: myIcon });
+      drawnItems.addLayer(marker); // Esto lo hace editable (mover/borrar) automáticamente
     }
+  } 
+  // Si es modo icono
+  else {
+    const data = configuracionIconos[placingIcon];
+    if (data) {
+      var marker = L.marker(e.latlng, { icon: leafletIcons[placingIcon] });
+      drawnItems.addLayer(marker);
+      iconosUsados.add(data.label);
+    }
+    document.getElementById("iconSelector").value = "";
+  }
+  
+  placingIcon = null;
 });
-
 // --- 5. EXPORTAR PDF (TU CONFIGURACIÓN ORIGINAL) ---
 function exportPDF() {
   const mapElement = document.getElementById("map");
