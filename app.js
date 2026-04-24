@@ -67,6 +67,10 @@ function clearMap() {
   iconosUsados.clear();
 }
 
+setTimeout(function() {
+    map.invalidateSize();
+}, 100);
+
 // --- 5. EXPORTAR PDF (TU CONFIGURACIÓN ORIGINAL) ---
 function exportPDF() {
   const mapElement = document.getElementById("map");
