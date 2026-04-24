@@ -30,7 +30,7 @@ var map = L.map('map', {
 });
 
 var bounds = [[0,0], [4000, 2295]];
-L.imageOverlay('plano1.png', bounds).addTo(map);
+L.imageOverlay('plano1.png', bounds, { interactive: false }).addTo(map);
 map.fitBounds(bounds);
 
 var drawnItems = new L.FeatureGroup();
