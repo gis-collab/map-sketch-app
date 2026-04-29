@@ -146,7 +146,7 @@ async function exportPDF() {
     
     // ESPACIO PARA EL LOGO (Si tienes el archivo logo.png en tu carpeta)
     const logoImg = new Image();
-    logoImg.src = 'desvio.png'; 
+    logoImg.src = 'tu_logo.png'; 
     try {
         pdf.addImage(logoImg, 'PNG', margin + 15, yStart + 2, 30, 12);
     } catch (e) { /* Si no hay logo no se rompe */ }
@@ -210,7 +210,6 @@ async function exportPDF() {
 
     pdf.save(`PMT_${direccion.replace(/ /g, "_")}.pdf`);
 }
-
 
 L.imageOverlay('plano1.png', bounds).addTo(map);
 
