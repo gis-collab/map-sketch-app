@@ -29,7 +29,7 @@ var map = L.map('map', {
   minZoom: -2
 });
 
-var bounds = [[0,0], [4000, 2295]];
+var bounds = [[0,0], [2295, 4000]];
 L.imageOverlay('plano1.png', bounds, { interactive: false }).addTo(map);
 map.fitBounds(bounds);
 
