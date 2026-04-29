@@ -106,109 +106,111 @@ map.on('click', function(e) {
 });
 // --- 5. EXPORTAR PDF (TU CONFIGURACIÓN ORIGINAL) ---
 function exportPDF() {
-  // 1. Preguntas iniciales
-  const horarioUsuario = prompt("Ingrese el horario:", "8:00 - 18:00");
-  const direccionUsuario = prompt("Ingrese la dirección:", "AC 20 x KR 39");
-  const tipoPmtUsuario = prompt("Ingrese el tipo de PMT:", "PMT POR EMERGENCIA");
+    // 1. PRIMERO PEDIMOS LOS DATOS (Esto asegura que aparezcan las ventanas)
+    const tipoPmt = prompt("Ingrese el tipo de PMT:", "PMT POR EMERGENCIA") || "PMT POR EMERGENCIA";
+    const direccion = prompt("Ingrese la dirección:", "AC 20 x KR 39") || "AC 20 x KR 39";
+    const horario = prompt("Ingrese el horario:", "8:00 - 18:00") || "8:00 - 18:00";
 
-  const mapElement = document.getElementById("map");
+    const mapElement = document.getElementById("map");
 
-  html2canvas(mapElement, {
-    useCORS: true,
-    backgroundColor: "#ffffff",
-    scale: 2
-  }).then(canvas => {
-    const imgData = canvas.toDataURL("image/png");
-    
-    // --- CARGA DEL LOGO ---
+    // Preparamos el logo
     const logoImg = new Image();
-    logoImg.src = 'tu_logo.png'; // REEMPLAZA CON TU ARCHIVO REAL
+    logoImg.src = 'tu_logo.png'; // Asegúrate de que este nombre sea el correcto
 
-    logoImg.onload = function() {
-      const pdf = new window.jspdf.jsPDF({
-        orientation: "landscape", unit: "mm", format: "a4"
-      });
+    html2canvas(mapElement, {
+        useCORS: true,
+        backgroundColor: "#ffffff",
+        scale: 2
+    }).then(canvas => {
+        const imgData = canvas.toDataURL("image/png");
 
-      const pageWidth = 297;
-      const pageHeight = 210;
-      const margin = 10; // Aumentado para evitar cortes
-      const bottomHeight = 45; // Espacio para el cajetín
+        logoImg.onload = function() {
+            const pdf = new window.jspdf.jsPDF({
+                orientation: "landscape",
+                unit: "mm",
+                format: "a4"
+            });
 
-      // 1. MAPA (Corregido para que NO se solape con el cajetín)
-      // Restamos el margen superior, el inferior y la altura del cajetín
-      const mapWidth = pageWidth - (margin * 2);
-      const mapHeight = pageHeight - bottomHeight - (margin * 2);
-      pdf.addImage(imgData, "PNG", margin, margin, mapWidth, mapHeight);
+            const pageWidth = 297;
+            const pageHeight = 210;
+            const margin = 10;
+            const bottomHeight = 45;
 
-      // 2. CAJETÍN INFERIOR
-      let yStart = pageHeight - bottomHeight - margin + 5;
+            // --- SOLUCIÓN AL SOLAPE ---
+            // El mapa ahora ocupa un espacio definido que NO toca el cajetín
+            const mapWidth = pageWidth - (margin * 2);
+            const mapHeight = pageHeight - bottomHeight - (margin * 2);
+            pdf.addImage(imgData, "PNG", margin, margin, mapWidth, mapHeight);
 
-      // BLOQUE IZQUIERDO (Logo + Info Dinámica)
-      pdf.rect(margin, yStart, 60, bottomHeight);
-      try {
-        pdf.addImage(logoImg, 'PNG', margin + 22, yStart + 2, 15, 8);
-      } catch(e) { }
-      
-      pdf.setFontSize(8);
-      pdf.text("ACUEDUCTO", margin + 5, yStart + 15);
-      pdf.text(tipoPmtUsuario.toUpperCase(), margin + 5, yStart + 23);
-      pdf.text(direccionUsuario.toUpperCase(), margin + 5, yStart + 30);
+            // --- CAJETÍN INFERIOR ---
+            let yStart = pageHeight - bottomHeight - 5; // Posición base del cajetín
 
-      // BLOQUE CENTRAL (Descripción)
-      pdf.rect(margin + 60, yStart, 140, bottomHeight);
-      pdf.setFontSize(7);
-      pdf.text("ACTIVIDADES PLANIFICADAS, COTIDIANAS Y DE EMERGENCIA EJECUTADAS POR LA EMPRESA DE ACUEDUCTO, ALCANTARILLADO Y ASEO DE BOGOTÁ D.C.", margin + 65, yStart + 10, { maxWidth: 130 });
-
-      // BLOQUE DERECHO (Convenciones Dinámicas con Iconos)
-      pdf.rect(margin + 200, yStart, 92, bottomHeight);
-      pdf.line(margin + 200, yStart + 10, margin + 260, yStart + 10); // Bajamos la línea para que no corte
-      pdf.line(margin + 260, yStart, margin + 260, yStart + bottomHeight);
-
-      pdf.setFontSize(7);
-      pdf.text("CONVENCIONES", margin + 202, yStart + 7);
-
-      // --- LÓGICA DE ICONOS EN CONVENCIONES ---
-      let listaKeys = Object.keys(configuracionIconos).filter(key => 
-        iconosUsados.has(configuracionIconos[key].label)
-      );
-
-      let yConv = yStart + 15;
-      if (listaKeys.length === 0) {
-        pdf.text("Sin elementos", margin + 202, yConv);
-      } else {
-        listaKeys.forEach((key, index) => {
-          if (index < 6) { // Para que no se salgan del cuadro
-            const iconUrl = configuracionIconos[key].url;
-            const label = configuracionIconos[key].label;
-            
-            // Intentar dibujar el iconito al lado del texto
+            // Bloque Izquierdo (Logo + Textos Dinámicos)
+            pdf.rect(margin, yStart, 60, bottomHeight);
             try {
-              const iconImg = new Image();
-              iconImg.src = iconUrl; 
-              // Dibujamos el icono pequeño (5x5 mm)
-              pdf.addImage(iconImg, 'PNG', margin + 202, yConv + (index * 5) - 3, 5, 5);
-            } catch(e) {}
+                pdf.addImage(logoImg, 'PNG', margin + 20, yStart + 2, 20, 10);
+            } catch (e) { console.log("Logo no encontrado"); }
             
-            pdf.text(label, margin + 208, yConv + (index * 5));
-          }
-        });
-      }
+            pdf.setFontSize(8);
+            pdf.setFont("helvetica", "bold");
+            pdf.text("ACUEDUCTO", margin + 5, yStart + 18);
+            pdf.setFont("helvetica", "normal");
+            pdf.text(tipoPmt.toUpperCase(), margin + 5, yStart + 26);
+            pdf.text(direccion.toUpperCase(), margin + 5, yStart + 34);
 
-      // HORARIO Y DATOS FINALES
-      pdf.text("HORARIO:", margin + 262, yStart + 7);
-      pdf.text(horarioUsuario, margin + 262, yStart + 13);
-      pdf.text("ESCALA: S/N", margin + 262, yStart + 22);
-      pdf.text("PLANO 1 DE 1", margin + 262, yStart + 32);
+            // Bloque Central
+            pdf.rect(margin + 60, yStart, 140, bottomHeight);
+            pdf.setFontSize(7);
+            const desc = "ACTIVIDADES PLANIFICADAS, COTIDIANAS Y DE EMERGENCIA EJECUTADAS POR LA EMPRESA DE ACUEDUCTO, ALCANTARILLADO Y ASEO DE BOGOTÁ D.C.";
+            pdf.text(desc, margin + 65, yStart + 15, { maxWidth: 130 });
 
-      // Marco exterior del plano
-      pdf.rect(5, 5, pageWidth - 10, pageHeight - 10);
-      
-      pdf.save(`Plano_${direccionUsuario.replace(/ /g, "_")}.pdf`);
-    };
+            // Bloque Derecho (CONVENCIONES CON ICONOS)
+            pdf.rect(margin + 200, yStart, 92, bottomHeight);
+            pdf.line(margin + 200, yStart + 10, margin + 260, yStart + 10);
+            pdf.line(margin + 260, yStart, margin + 260, yStart + bottomHeight);
 
-    logoImg.onerror = function() { logoImg.onload(); };
-  });
+            pdf.setFontSize(7);
+            pdf.setFont("helvetica", "bold");
+            pdf.text("CONVENCIONES", margin + 205, yStart + 7);
+            pdf.setFont("helvetica", "normal");
+
+            // --- DIBUJAR ICONOS EN CONVENCIONES ---
+            let yConv = yStart + 16;
+            // Filtramos los iconos que realmente se usaron
+            const usados = Object.keys(configuracionIconos).filter(k => iconosUsados.has(configuracionIconos[k].label));
+
+            usados.forEach((key, index) => {
+                if (index < 5) { // Límite para que no se solape la línea
+                    const iconData = configuracionIconos[key];
+                    const imgIcono = new Image();
+                    imgIcono.src = iconData.url;
+                    // Dibujamos el icono al lado del nombre
+                    pdf.addImage(imgIcono, 'PNG', margin + 202, yConv + (index * 6) - 4, 5, 5);
+                    pdf.text(iconData.label, margin + 210, yConv + (index * 6));
+                }
+            });
+
+            // Horario y Escala
+            pdf.setFont("helvetica", "bold");
+            pdf.text("HORARIO:", margin + 265, yStart + 7);
+            pdf.setFont("helvetica", "normal");
+            pdf.text(horario, margin + 265, yStart + 14);
+            pdf.text("ESCALA: S/N", margin + 265, yStart + 24);
+            pdf.text("PLANO 1 DE 1", margin + 265, yStart + 34);
+
+            // Marco decorativo final
+            pdf.setLineWidth(0.5);
+            pdf.rect(5, 5, pageWidth - 10, pageHeight - 10);
+
+            pdf.save(`PMT_${direccion.replace(/ /g, "_")}.pdf`);
+        };
+
+        // Si el logo no carga, ejecutamos la función de todos modos
+        logoImg.onerror = function() { logoImg.onload(); };
+    });
 }
+
+
 L.imageOverlay('plano1.png', bounds).addTo(map);
 
 window.addEventListener('load', function() {
