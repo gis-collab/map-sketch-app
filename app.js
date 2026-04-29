@@ -63,30 +63,29 @@ map.on('click', function(e) {
   if (!placingIcon) return;
 
   // 1. MODO TEXTO
+  // 1. MODO TEXTO (Escritura directa corregida)
   if (placingIcon === 'TEXT_MODE') {
     const myIcon = L.divIcon({
-        // Creamos un div con 'contenteditable' para escribir adentro
-        html: '<div contenteditable="true" class="text-editable">Escribe aquí...</div>',
+        // Añadimos 'display: inline-block' para que la caja se ajuste al texto
+        html: '<div contenteditable="true" style="display: inline-block; outline: none;" class="text-editable">Escribe aquí...</div>',
         className: 'text-label',
         iconSize: [null, null]
     });
 
     const marker = L.marker(e.latlng, { icon: myIcon }).addTo(drawnItems);
     
-    // TRUCO: Enfocar el texto automáticamente al aparecer
+    // Enfocar automáticamente para empezar a escribir de una vez
     setTimeout(() => {
         const el = marker.getElement().querySelector('.text-editable');
         if (el) {
             el.focus();
-            // Borra el texto por defecto al hacer clic
-            el.addEventListener('focus', () => {
-                if (el.innerText === "Escribe aquí...") el.innerText = "";
-            });
+            // Limpiar el texto de ejemplo al hacer foco
+            el.onfocus = function() { if(this.innerText === "Escribe aquí...") this.innerText = ""; };
         }
     }, 100);
 
-    placingIcon = null; // Desactivamos el modo después de ponerlo
-  } 
+    placingIcon = null; 
+  }
   // 2. MODO ICONO
   else {
     const data = configuracionIconos[placingIcon];
