@@ -3,7 +3,8 @@ var placingIcon = null;
 
 function enableTextMode() {
   placingIcon = 'TEXT_MODE';
-  alert("Haz clic en el mapa para colocar el texto");
+  // Opcional: podrías cambiar el cursor del mapa para indicar que está en modo texto
+  document.getElementById('map').style.cursor = 'crosshair';
 }
 // --- 1. CONFIGURACIÓN DE ICONOS (Tus nuevos archivos) ---
 const configuracionIconos = {
