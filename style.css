@@ -40,15 +40,16 @@ html, body {
 
 /* Estilo para el texto en el mapa */
 .text-label {
-    background: transparent;
-    border: none;
-    font-weight: bold;
-    color: black;
-    white-space: nowrap;
-    font-size: 16px;
-    text-shadow: 1px 1px 2px white; 
+    background-color: white !important;
+    border: 1px solid black !important;
+    padding: 5px !important;
+    font-weight: bold !important;
+    white-space: nowrap !important;
+    z-index: 1000 !important;
+    min-width: 50px; /* Tamaño mínimo para poder hacer clic */
+    min-height: 20px;
+    cursor: text;    /* Cambia el cursor para indicar que se puede escribir */
 }
-
 
 
 
