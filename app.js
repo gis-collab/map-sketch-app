@@ -63,16 +63,28 @@ map.on('click', function(e) {
 
   // 1. MODO TEXTO
   if (placingIcon === 'TEXT_MODE') {
-    const texto = prompt("Escribe el texto:");
-    if (texto) {
-      const myIcon = L.divIcon({
-        html: texto,
+    const myIcon = L.divIcon({
+        // Creamos un div con 'contenteditable' para escribir adentro
+        html: '<div contenteditable="true" class="text-editable">Escribe aquí...</div>',
         className: 'text-label',
         iconSize: [null, null]
-      });
-      // Añadimos directamente a drawnItems para que sea editable
-      L.marker(e.latlng, { icon: myIcon }).addTo(drawnItems);
-    }
+    });
+
+    const marker = L.marker(e.latlng, { icon: myIcon }).addTo(drawnItems);
+    
+    // TRUCO: Enfocar el texto automáticamente al aparecer
+    setTimeout(() => {
+        const el = marker.getElement().querySelector('.text-editable');
+        if (el) {
+            el.focus();
+            // Borra el texto por defecto al hacer clic
+            el.addEventListener('focus', () => {
+                if (el.innerText === "Escribe aquí...") el.innerText = "";
+            });
+        }
+    }, 100);
+
+    placingIcon = null; // Desactivamos el modo después de ponerlo
   } 
   // 2. MODO ICONO
   else {
