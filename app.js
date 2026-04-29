@@ -2,9 +2,11 @@ var iconosUsados = new Set();
 var placingIcon = null;
 
 function enableTextMode() {
+  // Quitamos CUALQUIER alert que haya aquí adentro
   placingIcon = 'TEXT_MODE';
-  // Eliminamos el alert para que no interrumpa
-  console.log("Modo texto activado: haz clic en el mapa");
+  
+  // Opcional: solo para que tú sepas que funcionó, lo ponemos en la consola (que no molesta)
+  console.log("Modo texto activado");
 }
 // --- 1. CONFIGURACIÓN DE ICONOS (Tus nuevos archivos) ---
 const configuracionIconos = {
