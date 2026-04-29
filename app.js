@@ -146,7 +146,7 @@ async function exportPDF() {
     
     // ESPACIO PARA EL LOGO (Si tienes el archivo logo.png en tu carpeta)
     const logoImg = new Image();
-    logoImg.src = 'tu_logo.png'; 
+    logoImg.src = 'desvio.png'; 
     try {
         pdf.addImage(logoImg, 'PNG', margin + 15, yStart + 2, 30, 12);
     } catch (e) { /* Si no hay logo no se rompe */ }
